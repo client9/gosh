@@ -1,36 +1,29 @@
-conduit
+gosh
 =======
 
-avoiding bash though go templates (really)
+Golang template-based "shell"
 
-## Smart Pipes
+## What is it
 
-Unlike standard shell pipes that are just text-in, text-out, gosh pipes are smarter.
-They map an input to output, where input and output can be anything.
+TODO
 
-For an simple example, `linecount` takes a `[]byte` or `string` and counts lines. 
-linecount also will accept a []string, and return its length.  In either case it returns an integer.
+## GOSH to go-lang template
 
-| []byte | integer | number of lines in input |
-| string | integer | number of lines in output |
-| []string | integer | length of input array |
+TODO
 
-Some of the pipes that emmulate complicated external CLI programs,
-
-| []byte | stdin |
-| string | stdin |
-| []string | treated as arguments to command (i.e. appened at end of command line) |
+## Example: Let's check Go source files with goimports
 
 
-## Example: Let's check Go source file with goimports
+```
+goimport "-l" "."
+```
 
-There are lots of ways in doing this in bash (exercise for the reader), 
-they can get crytic quite quickly.
+runs `goimport` on the current directory.  This is fine more many cases, but as an example will show how to select different files and process the output.
 
-The most literal translation might be something like this
 ```
 goimports "-l" (glob "*.go") | linecount | eq 0 | assert "goimports check failed"
 ```
+
 * goimports (the external program) is called by computing some command line arguments with glob.
 * linecount takes that an produces an integer
 * eq is a standard golang template function, here is the linecount 0?

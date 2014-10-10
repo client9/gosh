@@ -1,66 +1,53 @@
 package main
 
 import (
-	"bytes"
 	"flag"
 	"fmt"
-	"github.com/client9/conduit"
 	"io/ioutil"
 	"log"
+	"os"
 	"text/template"
+
+	"github.com/client9/conduit"
 )
 
-/*
-
-gosh 'template' files
-
-*/
-
 func main() {
-	inplace := false
-	flag.BoolVar(&inplace, "inplace", false, "overwrite input files")
+	var raw []byte
+	var err error
+	var name string
+
+	readFromString := flag.String("c", "", "Read from string")
 	flag.Parse()
 	args := flag.Args()
-
-	if len(args) == 0 {
-		log.Fatalf("Usages: gosh 'pipeline' files....")
+	if len(*readFromString) != 0 {
+		name = "cli"
+		raw = []byte(*readFromString)
+	} else if len(args) == 1 {
+		name = args[0]
+		raw, err = ioutil.ReadFile(args[0])
+		if err != nil {
+			log.Fatalf("Unable to read %q: %s", args[0], err)
+		}
+	} else {
+		name = "stdin"
+		raw, err = ioutil.ReadAll(os.Stdin)
+		if err != nil {
+			log.Fatalf("Unable to read stdin: %s", err)
+		}
 	}
 
-	cmds := "{{ . | " + args[0] + " | string }}"
-	//cmds := "{{ . | " + args[0] + " }}"
-	funcMap := template.FuncMap{
-		"jsescapetemplate":     conduit.JSEscapeTemplate,
-		"jsunescapetemplate":   conduit.JSUnescapeTemplate,
-		"htmlescapetemplate":   conduit.HTMLEscapeTemplate,
-		"htmlunescapetemplate": conduit.HTMLUnescapeTemplate,
-		"linecount":            conduit.LineCount,
-		"gzip":                 conduit.Gzip,
-		"gunzip":               conduit.Gunzip,
-		"string":               conduit.String,
-		"jshint":               conduit.JSHint,
-		"jsbeautify":           conduit.JSBeautify,
-		"jsuglify":             conduit.JSUglify,
-		"devnull":              conduit.DevNull,
-	}
+	// TODO -- pass in CLI arguments
 
-	t, err := template.New("cli").Funcs(funcMap).Parse(cmds)
+	t := template.New(name)
+	t = t.Funcs(conduit.DefaultFuncMap)
+	t = t.Funcs(conduit.ExternalFuncMap)
+	t, err = t.Parse(conduit.TransformTemplate(raw))
 	if err != nil {
-		log.Fatalf("Unable to parse %s: %s", cmds, err)
+		panic(err)
 	}
-
-	// TOD use stdin
-	files := args[1:]
-	for _, fname := range files {
-		fbytes, err := ioutil.ReadFile(fname)
-		if err != nil {
-			log.Fatalf("Error reading %s: %s", fname, err)
-		}
-		out := bytes.Buffer{}
-		err = t.Execute(&out, fbytes)
-		if err != nil {
-			log.Fatalf("%s: %v", fname, err)
-			return
-		}
-		fmt.Printf("%s", out.String())
+	err = t.Execute(os.Stdout, nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "\n%v\n", err)
+		os.Exit(1)
 	}
 }

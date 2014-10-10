@@ -2,10 +2,29 @@ package conduit
 
 import (
 	"errors"
-	"os"
 	"fmt"
+	"os"
 )
 
+// Type returns the native go type as a string.
+//
+// Arguments: 1
+// Input: anything
+// Output: string
+// Error: never
+//
+func Type(arg interface{}) string {
+	return fmt.Sprintf("%T", arg)
+}
+
+// Debug writes a message to stderr and returns the original input
+func Debug(msg string, arg interface{}) interface{} {
+	os.Stderr.WriteString(msg)
+	return arg
+}
+
+// Assert halts execution if argument is false
+// If two arguments, then first argument is message
 func Assert(args ...interface{}) (bool, error) {
 	var truth bool
 	var ok bool
@@ -17,7 +36,7 @@ func Assert(args ...interface{}) (bool, error) {
 		idx = 0
 		msg = "Assertion failed"
 	case 2:
-		idx = 1	
+		idx = 1
 		msg, ok = args[0].(string)
 		if !ok {
 			return false, errors.New("Expected message for arg 0")
@@ -31,8 +50,7 @@ func Assert(args ...interface{}) (bool, error) {
 	}
 
 	if !truth {
-		fmt.Fprintf(os.Stderr, "%s\n", msg)
-		os.Exit(1)
+		//fmt.Fprintf(os.Stderr, "%s", msg)
 		return false, errors.New(msg)
 	}
 

@@ -1,0 +1,5 @@
+#!/usr/bin/env gosh
+range $fname := glob "*.go"
+    open . | goimports "-d" | linecount | eq 0 | assert ( printf "%s : goimport failed\n" $fname )
+end
+

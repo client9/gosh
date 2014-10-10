@@ -1,0 +1,8 @@
+#!/usr/bin/env gosh
+define "goimport-check"
+ . | goimports "-l" | linecount | eq 0 | assert "goimports check failed"	
+end
+	
+with glob "*.go"
+	template "goimport-check" .
+end

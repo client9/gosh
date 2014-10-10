@@ -1,0 +1,5 @@
+#!/usr/bin/env gosh
+# test
+range $fname := glob "*.go"
+ open . | linecount | printf "%s: %d\n" $fname
+end

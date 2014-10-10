@@ -1,0 +1,14 @@
+#!/usr/bin/env gosh
+
+$modified := git "diff" "--cached" "--name-only" "--diff-filter=ACM" | pathmatch "*.go"
+
+range $modified | gofmt "-s" "-l" | split
+ 	printf "gofmt -w -s %s\n" .
+	assert "gofmt failed" false
+end
+range $modified | goimports "-l" | split
+	printf "goimports -w %s\n" .
+	assert "goimports failed" false
+end
+$modified | or (govet .) true | println
+

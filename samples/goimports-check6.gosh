@@ -1,0 +1,17 @@
+#!/usr/bin/env gosh
+
+define "goimport-check"
+    with . | goimports "-l" | split
+        println "Correct the following files: "
+        range .
+	    printf "goimports -w %s\n" .
+        end
+        assert false
+    end
+end
+
+with glob "*.go"
+    template "goimport-check" .
+end
+
+

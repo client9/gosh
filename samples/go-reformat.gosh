@@ -1,0 +1,4 @@
+#!/usr/bin/env gosh
+range $fname := glob "*.go"
+    debug (printf "Reformating %s\n" $fname) $fname | open | gofmt "-s" | goimports | write $fname
+end

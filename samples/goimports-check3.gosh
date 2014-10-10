@@ -1,0 +1,16 @@
+#!/usr/bin/env gosh
+
+with glob "*.go" | gofmt "-s" "-l" | split
+	println "Correct the following files: "
+	range .
+ 		printf "gofmt -w -s %s\n" .
+	end
+	assert true
+end
+with glob "*.go" | goimports "-l" | split
+	println "Correct the following files: "
+	range .
+		printf "goimports -w %s\n" .
+	end
+	assert false
+end

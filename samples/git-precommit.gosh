@@ -1,0 +1,20 @@
+#!/usr/bin/env gosh
+
+$files := git "diff" "--cached" "--name-only" "--diff-filter=ACM" | pathmatch "*.go"
+
+with $files | gofmt "-s" "-l" | split
+	println "Correct the following files: "
+	range .
+ 		printf "gofmt -w -s %s\n" .
+	end
+	assert false
+end
+
+with $files | goimports "-l" | split
+	println "Correct the following files: "
+	range .
+		printf "goimports -w %s\n" .
+	end
+	assert false
+end
+

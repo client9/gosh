@@ -31,7 +31,7 @@ var DefaultFuncMap = template.FuncMap{
 	"lastindex": stringLastIndex,
 	"slice":     stringSlice,
 	"string":    String,
-	"devnull":   DevNull,
+	"discard":   DevNull,
 	"split":     Split,
 	"type":      Type,
 	"lower":     stringLower,

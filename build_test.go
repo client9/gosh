@@ -8,7 +8,7 @@ import (
 const script = `
 $files := git "diff" "--cached" "--name-only" "--diff-filter=ACM" | pathmatch "*.go"
 
-with $files | gofmt "-s" "-l" | split
+with gofmt "-s" "-l" "." | split
         println "Correct the following files: "
         range .
                 printf "gofmt -w -s %s\n" .
@@ -16,7 +16,7 @@ with $files | gofmt "-s" "-l" | split
         assert false
 end
 
-with $files | goimports "-l" | split
+with goimports "-l" "." | split
         println "Correct the following files: "
         range .
                 printf "goimports -w %s\n" .
@@ -24,7 +24,7 @@ with $files | goimports "-l" | split
         assert false
 end
 
-with $files | golint  | string
+with golint "." | string
 	print .
 	assert false
 end

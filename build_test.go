@@ -1,4 +1,4 @@
-package conduit
+package gosh
 
 import (
 	"os"

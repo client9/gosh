@@ -1,4 +1,4 @@
-package conduit
+package gosh
 
 // GoFmt is wrapper to "gofmt"
 func GoFmt(args ...interface{}) ([]byte, error) {

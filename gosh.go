@@ -79,6 +79,8 @@ func TransformTemplate(stdin []byte) string {
 		if line[len(line)-1] == '\\' {
 			continuation = true
 			line[len(line)-1] = ' '
+			line = bytes.TrimSpace(line)
+			line = append(line, ' ')
 		} else {
 			continuation = false
 		}

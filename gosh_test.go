@@ -21,6 +21,10 @@ func TestTransformations(t *testing.T) {
 			in:  "line1a\\\nline1b\nline2",
 			out: "{{ line1a line1b }}{{ line2 }}",
 		},
+		{
+			in:  "line1a  \\\nline1b\nline2",
+			out: "{{ line1a line1b }}{{ line2 }}",
+		},
 	}
 
 	for _, tt := range tests {

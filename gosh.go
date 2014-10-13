@@ -66,14 +66,28 @@ var ExternalFuncMap = template.FuncMap{
 func TransformTemplate(stdin []byte) string {
 	out := bytes.Buffer{}
 	lines := bytes.Split(stdin, []byte("\n"))
+	continuation := false
 	for _, line := range lines {
 		line = bytes.TrimSpace(line)
 		if len(line) == 0 || line[0] == '#' {
 			continue
 		}
-		out.WriteString("{{ ")
+		if !continuation {
+			out.WriteString("{{ ")
+		}
+
+		if line[len(line)-1] == '\\' {
+			continuation = true
+			line[len(line)-1] = ' '
+		} else {
+			continuation = false
+		}
+
 		out.Write(line)
-		out.WriteString(" }}")
+
+		if !continuation {
+			out.WriteString(" }}")
+		}
 	}
 	return out.String()
 }

@@ -8,7 +8,7 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/client9/conduit"
+	"github.com/client9/gosh"
 )
 
 func main() {
@@ -39,9 +39,9 @@ func main() {
 	// TODO -- pass in CLI arguments
 
 	t := template.New(name)
-	t = t.Funcs(conduit.DefaultFuncMap)
-	t = t.Funcs(conduit.ExternalFuncMap)
-	t, err = t.Parse(conduit.TransformTemplate(raw))
+	t = t.Funcs(gosh.DefaultFuncMap)
+	t = t.Funcs(gosh.ExternalFuncMap)
+	t, err = t.Parse(gosh.TransformTemplate(raw))
 	if err != nil {
 		panic(err)
 	}

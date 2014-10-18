@@ -18,23 +18,40 @@ import (
 //
 
 // DefaultFuncMap is the default function map for the template engine
+//
+// Fundamental Types: strings, []strings
+//
 var DefaultFuncMap = template.FuncMap{
-	"array":     Array,
-	"assert":    Assert,
-	"contains":  stringContains,
-	"debug":     Debug,
+	"array":           Array,
+	"take":            ArrayTake,
+	"drop":            ArrayDrop,
+	// TODO sort, revert
+	"assert":          Assert,
+	"contains":        stringContains,
+	"debug":           Debug,
+	"discard":         DevNull,
+	"grep":            Grep,
+	"integer":         Integer,
+	"hassuffix":       stringHasSuffix,
+	"hasprefix":       stringHasPrefix,
+	"join":            Join,
+	"linecount":       LineCount,
+	"lastindex":       stringLastIndex,
+	"lower":           stringLower,
+	"regexpcompile":   RegexpCompile,
+	"regexpmatch":     RegexpMatch,
+	"regexpquotemeta": RegexpQuoteMeta,
+
 	"pathmatch": PathMatch,
-	"join":      Join,
-	"linecount": LineCount,
-	"grep":      Grep,
-	"integer":   Integer,
-	"lastindex": stringLastIndex,
+	"repeat":    stringRepeat,
 	"slice":     stringSlice,
 	"string":    String,
-	"discard":   DevNull,
 	"split":     Split,
+	"trim":      stringTrim,
+	"trimleft":  stringTrimLeft,
+	"trimright": stringTrimRight,
+	"trimspace": stringTrimSpace,
 	"type":      Type,
-	"lower":     stringLower,
 	"upper":     stringUpper,
 }
 

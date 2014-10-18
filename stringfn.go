@@ -63,12 +63,6 @@ func stringRepeat(count int, source string) string {
 func stringLower(source string) string {
 	return strings.ToLower(source)
 }
-func stringLowerMulti(sources ...string) []string {
-	for pos, val := range sources {
-		sources[pos] = strings.ToLower(val)
-	}
-	return sources
-}
 
 func stringUpper(source string) string {
 	return strings.ToUpper(source)

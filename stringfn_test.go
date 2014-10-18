@@ -8,20 +8,27 @@ import (
 func TestLower(t *testing.T) {
 	var casetests = []struct {
 		script   string
+		input    string
 		expected string
 	}{
-		{` lower $`, "foo.png"},
-		{` $ | lastindex "." `, "3"},
-		{` slice (lastindex "." $) $ `, ".PNG"},
-		{` slice (lastindex "." $) $ | lower | contains ".png" `, "true"},
+		{` lower $`, "FOO.PNG", "foo.png"},
+		{` $ | lower`, "FOO.PNG", "foo.png"},
+		{` $ | lower | upper`, "Foo.Png", "FOO.PNG"},
+		{` $ | lower | repeat 2`, "FOO.PNG", "foo.pngfoo.png"},
+		{` $ | lastindex "." `, "foo.png", "3"},
+		{` slice (lastindex "." $) $ `, "foo.PNG", ".PNG"},
+		{` slice (lastindex "." $) $ | lower | contains ".png" `, "foo.PNG", "true"},
+		{` $ | trim "ax" `, "xaxfoo.pngxax", "foo.png"},
+		{` $ | trimspace`, "  foo.png   ", "foo.png"},
+		{` array "foo" "bar" "c" | drop 1 | join "-"`, "", "foo-bar"},
 		//	{` $ | slice (lastindexof "." $ ) `, ".PNG" },
 		//	{` lowerm "FOO" "BAR" `, "[foo bar]"},
 		//	{` split " " "FOO BAR" | lower `, "[foo bar]"},
 	}
 
-	for _, tt := range casetests {
+	for pos, tt := range casetests {
 
-		out, err := Execute("testlower", tt.script, "FOO.PNG")
+		out, err := Execute(fmt.Sprintf("testcase%d", pos), tt.script, tt.input)
 		if err != nil {
 			panic(err)
 		}

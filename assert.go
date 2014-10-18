@@ -125,3 +125,40 @@ func String(data interface{}) string {
 		return fmt.Sprintf("%v", data)
 	}
 }
+
+// ArrayDrop the first N arguments from array, if N positive
+//  If N is negative, remove last N arguments
+func ArrayDrop(n int, args []string) ([]string, error) {
+	
+	// drop from start
+	if n > 0 {
+		return args[n:], nil
+	}
+
+	// drop from end
+	if n < 0 {
+		return args[:len(args)-n], nil
+	}
+
+	// do nothing
+	return args, nil
+}
+
+
+// ArrayTake the first N arguments from array, if N positive
+//  If N is negative, remove last N arguments
+func ArrayTake(n int, args []string) ([]string, error) {
+	
+	// drop from start
+	if n > 0 {
+		return args[:n], nil
+	}
+
+	// drop from end
+	if n < 0 {
+		return args[len(args)-n:], nil
+	}
+
+	// do nothing
+	return args, nil
+}

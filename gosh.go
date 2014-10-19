@@ -22,9 +22,9 @@ import (
 // Fundamental Types: strings, []strings
 //
 var DefaultFuncMap = template.FuncMap{
-	"array":           Array,
-	"take":            ArrayTake,
-	"drop":            ArrayDrop,
+	"array": Array,
+	"take":  ArrayTake,
+	"drop":  ArrayDrop,
 	// TODO sort, revert
 	"assert":          Assert,
 	"contains":        stringContains,
